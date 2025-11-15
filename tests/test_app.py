@@ -1,6 +1,7 @@
 import os
 import sys
 
+
 # =========================================================================
 # Ajuste del path para que Python pueda importar app.py correctamente
 # =========================================================================

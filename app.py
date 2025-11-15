@@ -154,6 +154,7 @@ def reporte():
     El resultado se expone en formato JSON para que pueda ser
     consumido por otra vista, endpoint o herramienta.
     """
+    
     stats = obtener_estadisticas()
     return render_template(
         'index.html',
