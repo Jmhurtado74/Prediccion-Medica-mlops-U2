@@ -1,4 +1,3 @@
-# Prediccion-Medica-mlops-U2
 # Predicción Médica Simulada (MLOps - Docker + Flask)
 
 Este proyecto forma parte del curso **Machine Learning Operations (MLOps)** de la Maestría en Inteligencia Artificial Aplicada – Universidad Icesi.  
