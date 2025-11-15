@@ -1,0 +1,76 @@
+name: CI/CD MLOps Médico
+
+on:
+  # Evento 1: cada Pull Request hacia main
+  pull_request:
+    branches:
+      - main
+  # Evento 2: cada push (commit) en main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pull-requests: write   # necesario para comentar en los PR
+
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      # SOLO en PR: comentar inicio de CI/CD
+      - name: Comentar inicio en el PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "CI/CD en acción. Ejecutando tareas …"
+            })
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Crear y activar entorno (opcional)
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          python -m pip install --upgrade pip
+
+      - name: Instalar dependencias
+        run: |
+          source .venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: Ejecutar pruebas unitarias con pytest
+        run: |
+          source .venv/bin/activate
+          pytest -v
+
+      # OPCIONAL: construir la imagen Docker para validar que el Dockerfile está bien
+      - name: Construir imagen Docker (validación)
+        run: |
+          docker build -t mlops-medico-ci .
+
+      # SOLO en PR: comentar fin de CI/CD
+      - name: Comentar fin en el PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "CI/CD terminado con éxito."
+            })
