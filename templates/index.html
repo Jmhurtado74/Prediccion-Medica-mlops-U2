@@ -1,22 +1,264 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Predicción Médica MLOps</title>
+    <meta charset="UTF-8" />
+    <title>Sistema de Predicción Médica - MLOps</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f5f7fb;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #1f4f7b;
+            color: #ffffff;
+            padding: 16px 24px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 24px auto 40px auto;
+            padding: 0 16px;
+        }
+
+        h1, h2, h3 {
+            margin-top: 0;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-title {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+            color: #1f4f7b;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 8px 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccd3e1;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #1f4f7b;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 18px;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        button:hover {
+            background-color: #163753;
+        }
+
+        .resultado {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 8px;
+            color: #1a3a5e;
+        }
+
+        .resultado-alerta {
+            color: #b30000;
+        }
+
+        .reporte-lista {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .reporte-lista li {
+            margin-bottom: 4px;
+            padding: 4px 6px;
+            background-color: #f0f3fa;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #666666;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h2>Simulador de Diagnóstico Médico (MLOps)</h2>
-    <p>Ingrese los datos del paciente para estimar su posible estado de salud.</p>
 
-    <form method="POST" action="/predecir">
-        Edad: <input type="number" name="edad" required><br>
-        Fiebre (°C): <input type="number" step="0.1" name="fiebre" required><br>
-        Dolor (0: No, 1: Sí): <input type="number" name="dolor" min="0" max="1" required><br>
-        <button type="submit">Diagnosticar</button>
-    </form>
-    
-    {% if resultado %}
-        <h3>{{ resultado }}</h3>
+<header>
+    <h1>Sistema de Predicción Médica</h1>
+    <p>Proyecto de MLOps – Unidad 2 (Semanas 3–4)</p>
+</header>
+
+<main>
+
+    <!-- Card: Formulario de predicción -->
+    <section class="card">
+        <h2 class="card-title">Formulario para el médico</h2>
+        <p>Ingrese los datos básicos del paciente para obtener una predicción simulada del estado de salud.</p>
+
+        <form method="POST" action="/predecir">
+            <div class="form-group">
+                <label for="edad">Edad (años)</label>
+                <input
+                    type="number"
+                    id="edad"
+                    name="edad"
+                    min="0"
+                    max="120"
+                    required
+                />
+            </div>
+
+            <div class="form-group">
+                <label for="fiebre">Temperatura corporal (°C)</label>
+                <input
+                    type="number"
+                    id="fiebre"
+                    name="fiebre"
+                    step="0.1"
+                    min="30"
+                    max="45"
+                    required
+                />
+            </div>
+
+            <div class="form-group">
+                <label for="dolor">Presencia de dolor</label>
+                <select id="dolor" name="dolor" required>
+                    <option value="0">0 – Sin dolor</option>
+                    <option value="1">1 – Con dolor</option>
+                </select>
+            </div>
+
+            <button type="submit">Obtener diagnóstico</button>
+        </form>
+
+        {% if resultado %}
+            <div class="resultado
+                {% if "RIESGO ALTO" in resultado or "TERMINAL" in resultado %}
+                    resultado-alerta
+                {% endif %}
+            ">
+                {{ resultado }}
+            </div>
+        {% endif %}
+    </section>
+
+    <!-- Card: Botón para ver reporte -->
+    <section class="card">
+        <h2 class="card-title">Reporte de uso del sistema</h2>
+        <p>
+            El sistema registra cada predicción en un archivo de texto (log) para
+            poder calcular estadísticas: conteo por categoría, últimas 5 predicciones y
+            fecha de la última predicción.
+        </p>
+
+        <form method="GET" action="/reporte">
+            <button type="submit">Ver reporte de predicciones</button>
+        </form>
+    </section>
+
+    <!-- Card: Visualización del reporte (si existe) -->
+    {% if reporte %}
+    <section class="card">
+        <h2 class="card-title">Reporte de predicciones</h2>
+
+        <p>
+            <strong>Fecha de la última predicción:</strong>
+            {% if reporte.fecha_ultima %}
+                {{ reporte.fecha_ultima }}
+            {% else %}
+                No hay predicciones registradas todavía.
+            {% endif %}
+        </p>
+
+        <div class="grid">
+            <!-- Conteo por categoría -->
+            <div>
+                <h3>Conteo por categoría</h3>
+                {% if reporte.conteo_por_categoria %}
+                    <ul class="reporte-lista">
+                        {% for categoria, cantidad in reporte.conteo_por_categoria.items() %}
+                            <li>
+                                <strong>{{ categoria }}:</strong> {{ cantidad }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No hay datos de conteo todavía.</p>
+                {% endif %}
+            </div>
+
+            <!-- Últimas 5 predicciones -->
+            <div>
+                <h3>Últimas 5 predicciones</h3>
+                {% if reporte.ultimas_5 %}
+                    <ul class="reporte-lista">
+                        {% for fila in reporte.ultimas_5 %}
+                            <li>{{ fila }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No hay registros todavía.</p>
+                {% endif %}
+            </div>
+        </div>
+    </section>
     {% endif %}
+
+</main>
+
+<footer>
+    Sistema de demostración para prácticas de MLOps – Flask + Docker + GitHub Actions.
+</footer>
+
 </body>
 </html>
+
+
+
+
+
+
+
+
