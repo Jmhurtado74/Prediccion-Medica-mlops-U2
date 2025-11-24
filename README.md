@@ -1,4 +1,4 @@
-Pipeline de MLOps – Reestructuración del Proyecto Médico 
+<img width="356" height="533" alt="image" src="https://github.com/user-attachments/assets/af705306-23d3-40b4-9db0-48cb8d7486a6" />Pipeline de MLOps – Reestructuración del Proyecto Médico 
 Este repositorio presenta la propuesta final y reestructurada del pipeline MLOps para el problema de predicción de enfermedades incluidas enfermedades huérfanas a partir de síntomas clínicos de un paciente.
 La propuesta incluye:
 •	Diseño end-to-end del pipeline de Machine Learning,
@@ -7,6 +7,7 @@ La propuesta incluye:
 •	 	Diagrama moderno genera grandes cantidades de datos. Sin embargo, para enfermedades huérfanas (poco comunes), la cantidad de datos es escasa. Se requiere un sistema de predicción profesional del pipeline,
 •	Integración con MLOps moderno (CI/CD, contenedores, despliegue, monitoreo, retraining),
 •	CHANGELOG entre la propuesta inicial (Semana 1) y esta propuesta final.
+
 1. Introducción
 El presente documento desarrolla una propuesta de reestructuración completa del pipeline de MLOps aplicado al problema de predicción de enfermedades, incluyendo enfermedades huérfanas, a partir de datos clínicos de pacientes. A la luz de los contenidos trabajados en el curso, se revisa la propuesta inicial planteada en la primera semana y se formula una versión final, robusta y alineada con buenas prácticas de ingeniería de datos, ciencia de datos y MLOps.
 La propuesta se concibe como una guía suficientemente detallada para que un equipo de aprendizaje automático pueda implementarla sin ambigüedades. Para ello se describen las etapas del pipeline end-to-end, las tecnologías recomendadas, las suposiciones realizadas y los cambios más relevantes frente a la versión inicial.
@@ -156,6 +157,8 @@ Tecnologías:
  3. Diagrama General del Pipeline MLOps
 Incluye todo el ciclo de vida:
  
+<img width="356" height="533" alt="image" src="https://github.com/user-attachments/assets/1c8c8ee8-4b4b-4596-a007-7ee4c83679b5" />
+
 
 4. Stack Tecnológico Justificado
 Etapa	Tecnología	Justificación
@@ -186,3 +189,4 @@ Esta propuesta reestructurada presenta un pipeline MLOps completo, robusto y pro
 La reestructuración del pipeline de MLOps propuesta en este documento transforma una idea general de modelado en un proceso end-to-end claramente definido, tecnológicamente viable y alineado con prácticas profesionales.
 La integración de herramientas como Airflow, MLflow, ONNX, Docker y GitHub Actions permite garantizar reproducibilidad, escalabilidad y trazabilidad. Asimismo, la consideración de mecanismos de monitoreo y reentrenamiento continuo resulta fundamental para mantener la utilidad clínica del modelo en el tiempo, especialmente en el contexto de enfermedades huérfanas donde los datos evolucionan y se incrementan de forma paulatina.
 Con esta propuesta, un equipo de ML cuenta con una hoja de ruta detallada para implementar, desplegar y mantener un sistema de predicción médica robusto, cumpliendo los criterios de calificación del curso y alineándose con los desafíos reales de la práctica profesional en MLOps.
+
